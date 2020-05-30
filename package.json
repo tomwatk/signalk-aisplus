@@ -1,0 +1,14 @@
+{
+  "name": "signalk-aisplus",
+  "version": "1.0.0",
+  "description": "AIS alerts on known ships, history logged for AIS targets.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tom Watkins",
+  "license": "ISC",
+  "keywords": [
+    "signalk-node-server-plugin"
+  ]
+}
