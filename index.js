@@ -6,6 +6,7 @@ module.exports = function (app) {
   plugin.description = 'Store/retrieve persistent AIS info on friendly targets, also with alerting';
 
   var unsubscribes = [];
+  var knownVessels = {};
 
   plugin.start = function (options, restartPlugin) {
     // Here we put our plugin logic
@@ -14,7 +15,7 @@ module.exports = function (app) {
     let localSubscription = {
       context: 'vessels.*',
       subscribe: [{
-        path: '*',
+        path: 'navigation.*',
         period: '00*60*1000' // 60 second refresh
       }]
     }
@@ -43,11 +44,35 @@ module.exports = function (app) {
   };
 
   function processDelta(data) {
-    let dict = data.updates[0].values[0];
-    let path = dict.path;
-    let value = dict.value;
+    // Ignore self for now
+    let myMmsi = app.getSelfPath('mmsi');
+    let vessels = app.getPath('vessels');
+    //app.debug(app.getPath('vessels'));
+    //app.debug(app.getSelfPath('mmsi'));
+    if(data.context == "vessels.urn:mrn:imo:mmsi:" + myMmsi) {
+      return;
+    }
 
-    app.debug("Delta: Path: " + path + "Value: " + value);
+    let context = data.contex
+    app.debug("context: "+data.context);
+    let mmsi = data.context.substring(8,data.context.length);
+    app.debug(mmsi);
+
+    data.updates.forEach(update => {
+      update.values.forEach(value => {
+        app.debug("Path: " +value.path + "Value: " + value.value);
+        // Anything new here?
+        if(value.path == "navigation.position") {
+          //let savedVessel = knownVessels[data.context];
+
+          let vessel = vessels.get("urn:mrn:imo:mmsi:"+mmsi);
+          app.debug(vessel);
+
+        } else {
+          //app.console.error("Uknown path! " + value.path);
+        }
+      });
+    });
   }
 
   return plugin;
