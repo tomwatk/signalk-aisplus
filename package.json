@@ -1,16 +1,20 @@
 {
   "name": "signalk-aisplus",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "AIS alerts on known ships, history logged for AIS targets.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Tom Watkins",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "keywords": [
     "signalk-node-server-plugin"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tomwatk/signalk-aisplus"
+  }
   "dependencies": {
     "node-gyp": "^6.1.0",
     "sqlite3": "^4.2.0"
