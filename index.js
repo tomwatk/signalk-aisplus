@@ -15,6 +15,7 @@
 const fs = require('fs');
 const sqlite3 = require('sqlite3');
 const filePath = require('path');
+const IGNORE_SELF = false;
 
 module.exports = function(app) {
   var plugin = {};
@@ -104,12 +105,11 @@ module.exports = function(app) {
   };
 
   function processDelta(data) {
-    // Ignore self for now
     let myMmsi = app.getSelfPath('mmsi');
     let vessels = app.getPath('vessels');
     //app.debug(app.getPath('vessels'));
     //app.debug(app.getSelfPath('mmsi'));
-    if (data.context == "vessels.urn:mrn:imo:mmsi:" + myMmsi) {
+    if (IGNORE_SELF && data.context == "vessels.urn:mrn:imo:mmsi:" + myMmsi) {
       return;
     }
 
@@ -126,7 +126,7 @@ module.exports = function(app) {
       app.debug("Path: " + path + " Value: " + value);
 
       let vessel = vessels[mmsiUrn];
-      app.debug(vessel);
+      //app.debug(vessel);
       addOrUpdateVessel(vessel)
     } else {
       //app.console.error("Uknown path! " + value.path);
